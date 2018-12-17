@@ -28,6 +28,7 @@ function geronimo() {
 	function getHighscore() {
 		setTimeout(ajax_get,30);
 	}
+
 	function ajax_get() {
 		var date = new Date().getTime();
 		$.ajax({
@@ -46,6 +47,7 @@ function geronimo() {
 		   } 
 		});
 	}
+
 	function ajax_add(n, s, l) {
 
 		$.ajax({
@@ -75,10 +77,9 @@ function geronimo() {
 	}
 	
 	function buildWall(context,gridX,gridY,width,height) {
-		console.log("BuildWall");
 		width = width*2-1;
 		height = height*2-1;
-		context.fillRect(pacman.radius/2+gridX*2*pacman.radius,pacman.radius/2+gridY*2*pacman.radius, width*pacman.radius, height*pacman.radius);
+		context.fillRect(pacman.radius/2+gridX*2*pacman.radius, pacman.radius/2+gridY*2*pacman.radius, width*pacman.radius, height*pacman.radius);
 	}
 	
 	function between(x, min, max) {
@@ -139,7 +140,7 @@ function geronimo() {
 		this.running = false;
 		this.pause = true;
 		this.score = new Score();
-		this.soundfx = 0;
+		this.soundfx = 1;
 		this.map;
 		this.pillCount;				// number of pills
 		this.monsters;
@@ -149,7 +150,6 @@ function geronimo() {
 		};
 		this.gameOver = false;
 		this.canvas = $("#myCanvas").get(0);
-		this.wallColor = "Blue";
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 
@@ -287,7 +287,7 @@ function geronimo() {
 					return '"Inky\s awakening"';
                     // Inky starts leaving the ghost house
 				case 4:
-					return '"Clyde\s awakening"';
+					return '"Kurt\s awakening"';
                     // Clyde starts leaving the ghost house
 				case 5:
 					return '"need for speed"';
@@ -435,8 +435,9 @@ function geronimo() {
 
 		/* ------------ Start Pre-Build Walls  ------------ */
 		this.buildWalls = function() {
-			if (this.ghostMode === 0) game.wallColor = "Blue";
+			if (this.ghostMode === 0) game.wallColor = "white";
 			else game.wallColor = "Red";
+
 			canvas_walls = document.createElement('canvas');
 			canvas_walls.width = game.canvas.width;
 			canvas_walls.height = game.canvas.height;
@@ -951,7 +952,7 @@ function geronimo() {
 	
 	function pacman() {
 		this.radius = 15;
-		this.posX = 0;
+		this.posX = 10;
 		this.posY = 6*2*this.radius;
 		this.speed = 5;
 		this.angle1 = 0.25;
@@ -1012,13 +1013,13 @@ function geronimo() {
 						)
 						{	var s;
 							if (field === "powerpill") {
-								Sound.play("powerpill");
+								Sound.play("bonus");
 								s = 50;
 								this.enableBeastMode();
 								game.startGhostFrightened();
 								}
 							else {
-								Sound.play("waka");
+								Sound.play("coin");
 								s = 10;
 								game.pillCount--;
 								}
@@ -1393,14 +1394,13 @@ function checkAppCache() {
 		function renderContent()
 		{
 			//context.save()
-
 			// Refresh Score
 			game.score.refresh(".score");
 						
 			// Pills
 			context.beginPath();
-			context.fillStyle = "White";
-			context.strokeStyle = "White";
+			context.fillStyle = "Yellow";
+			context.strokeStyle = "Yellow";
 			
 			var dotPosY;
 			$.each(game.map.posY, function(i, item) {
@@ -1411,7 +1411,10 @@ function checkAppCache() {
 					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
 				   }
 				   else if (this.type == "powerpill") {
-					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.powerpillSizeCurrent,0*Math.PI,2*Math.PI);
+					//context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.powerpillSizeCurrent,0*Math.PI,2*Math.PI);
+					context.font = "16px Arial";
+					context.textAlign = "center";
+					context.fillText("$$",game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius);
 					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
 				   }
 			   }); 
@@ -1430,15 +1433,26 @@ function checkAppCache() {
 				inky.draw(context);
 				clyde.draw(context);
 				
-				
 				// Pac Man
 				context.beginPath();
-				context.fillStyle = "Yellow";
-				context.strokeStyle = "Yellow";
-				context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
+				context.fillStyle = "White";
+				context.strokeStyle = "Black";
+				context.lineWidth = "5";
+
+				context.arc(pacman.posX+pacman.radius, pacman.posY+pacman.radius,pacman.radius, pacman.angle1*Math.PI, pacman.angle2*Math.PI);
 				context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
 				context.stroke();
 				context.fill();
+
+				// EA Label
+				context.fillStyle = "White";
+				context.strokeStyle = "White";
+				context.font = "bolder italic 13px Arial";
+				context.textAlign = "center";
+				context.fillText("██",pacman.posX+pacman.radius, pacman.posY+pacman.radius+1);
+				context.fillStyle = "Black";
+				context.strokeStyle = "Black";
+				context.fillText("EA",pacman.posX+pacman.radius, pacman.posY+pacman.radius+1);
 			}
 			
 		}

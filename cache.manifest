@@ -12,6 +12,7 @@ pacman-canvas.css
 # external resources
 style.css
 img/bg-pattern-black.png
+img/bg-pattern-grass.jpg
 
 # fonts
 fonts/PressStart2Play.eot
@@ -43,6 +44,8 @@ img/instructions/instructions_scatter.PNG
 img/instructions/instructions_powerpill.PNG
 
 # MP3
+mp3/bonus.mp3
+mp3/coin.mp3
 mp3/die.mp3
 mp3/eatghost.mp3
 mp3/powerpill.mp3
@@ -50,6 +53,8 @@ mp3/theme.mp3
 mp3/waka.mp3
 
 # WAV
+wav/bonus.wav
+wav/coin.wav
 wav/die.wav
 wav/eatghost.wav
 wav/powerpill.wav

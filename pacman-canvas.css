@@ -64,7 +64,7 @@ input[type="text"]:hover, input[type="text"]:focus, input[type="password"]:hover
 #highscore-list {}
 #score { float: right; }
 
-#myCanvas { border: none; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
+#myCanvas { border: none; display: block; background: rgb(85,85,85,0.4); width: 100%;  height: auto;} 
 #canvas-container { position: relative;}
 #canvas-overlay-container {
 	position: absolute;

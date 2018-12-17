@@ -13,21 +13,20 @@
   "icons": [
     {
       "src": "img/icon-128.png",
-      "sizes": "128x128",
+      "sizes": "128x128"
     }
   ],
 
   "app": {
     "urls": [
-      "http://pacman.platzh1rsch.ch/"
+      "https://pacman.exelance.ch/"
     ],
     "launch": {
-      "web_url": "http://pacman.platzh1rsch.ch"
+      "web_url": "https://pacman.exelance.ch"
     }
 	
 	},
 
-  "verification_key" : "eca78f4d-14f3-4fe7-8b44-3e0006a9a9c7",
   "type" : "web",
   "last_update" : "2018-03-06 16:45:11+0000"
 	

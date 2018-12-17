@@ -1,9 +1,15 @@
 <?php header('Content-Type: application/json');
 
+# Debug secion. Uncomment if required.
+#ini_set('display_errors', 'On');
+#error_reporting(E_ALL);
+
 /* IMPORTANT:
  * change this to the main url of where you host the application, otherwise, every entry will be marked as a cheater
 */
-$hostdomain = 'pacman.platzh1rsch.ch';
+
+define("HOST_DOMAIN", "pacman.exelance.ch");
+define("DB_NAME", "pacman.db");
 
 if (isset($_POST['action'])) {
 	switch ($_POST['action']) {
@@ -18,9 +24,11 @@ if (isset($_POST['action'])) {
 			if(isset($_POST['name']) || isset($_POST['score']) || isset($_POST['level'])) 
 				echo addHighscore($_POST['name'],$_POST['score'], $_POST['level']);
 			break;
+		/* 
 		case 'reset':
 			echo resetHighscore();
-			break;
+			break; 
+		*/
 		}
 } else if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'get') {
@@ -32,10 +40,9 @@ if (isset($_POST['action'])) {
 	}
 } else echo "define action to call";
 
-
 function getHighscore($page = 1) {
 
-	$db = new SQLite3('pacman.db');
+	$db = new SQLite3(DB_NAME);
 	createDataBase($db);
 	$results = $db->query('SELECT name, score FROM highscore WHERE cheater = 0 AND name != "" ORDER BY score DESC LIMIT 10 OFFSET ' . ($page-1)*10);
 	while ($row = $results->fetchArray()) {
@@ -52,7 +59,7 @@ function getHighscore($page = 1) {
 
 function addHighscore($name, $score, $level) {
 
-	$db = new SQLite3('pacman.db');
+	$db = new SQLite3(DB_NAME);
 	$date = date('Y-m-d h:i:s', time());
 	createDataBase($db);
 	$ref = isset($_SERVER[ 'HTTP_REFERER']) ? $_SERVER[ 'HTTP_REFERER'] : "";
@@ -61,7 +68,7 @@ function addHighscore($name, $score, $level) {
 	$remH = isset($_SERVER[ 'REMOTE_HOST']) ? $_SERVER[ 'REMOTE_HOST'] : "";
 
 	// some simple checks to avoid cheaters
-	$ref_assert = preg_match('/http(s)?:\/\/.*' . $hostdomain . '/', $ref) > 0;
+	$ref_assert = preg_match('/http(s)?:\/\/.*' . HOST_DOMAIN . '/', $ref) > 0;
 	$ua_assert = ($ua != "");
 	$cheater = 0;
 	if (!$ref_assert || !$ua_assert) {
@@ -104,8 +111,7 @@ function addHighscore($name, $score, $level) {
 }
 
 function resetHighscore() {
-	$db = new SQLite3('pacman.db');
-	$date = date('Y-m-d h:i:s', time());
+	$db = new SQLite3(DB_NAME);
 	$db->exec('DROP TABLE IF EXISTS highscore');
 	createDataBase($db);
 }
